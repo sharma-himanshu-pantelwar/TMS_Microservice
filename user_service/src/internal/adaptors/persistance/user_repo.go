@@ -25,6 +25,7 @@ func (u UserRepo) CreateUser(user users.User) (users.User, error) {
 		return users.User{}, err
 	}
 	user.Id = id
+	user.Password = hashedPassword
 
 	return user, nil
 }
