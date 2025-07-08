@@ -15,7 +15,9 @@ type TaskDetails struct {
 
 type TaskRepoImpl interface {
 	CreateTask(taskData TaskDetails) (TaskDetails, error)
+	UpdateTask(taskData TaskDetails, taskId int) (TaskDetails, error)
 }
 type TaskServiceImpl interface {
 	CreateTask(taskData TaskDetails) (TaskDetails, error)
+	UpdateTask(taskData TaskDetails, taskId int) (TaskDetails, error)
 }

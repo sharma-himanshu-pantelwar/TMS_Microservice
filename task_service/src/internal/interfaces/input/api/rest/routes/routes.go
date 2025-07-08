@@ -20,6 +20,7 @@ func InitRoutes(taskHandler *handler.TaskHandler) http.Handler {
 	}))
 	router.Route("/v1/tasks", func(r chi.Router) {
 		r.Post("/", taskHandler.RegisterTaskHandler)
+		r.Put("/{id}", taskHandler.UpdateTaskHandler)
 
 	})
 

@@ -32,3 +32,46 @@ func (t TaskRepo) CreateTask(taskData tasks.TaskDetails) (tasks.TaskDetails, err
 	task.Id = taskId
 	return task, nil
 }
+
+func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.TaskDetails, error) {
+	var task tasks.TaskDetails
+
+	query := `
+		UPDATE TASKS SET
+			ASSIGNED_BY = $1,
+			ASSIGNED_TO = $2,
+			ASSIGNED_AT = $3,
+			ACCEPTED_AT = $4,
+			DEADLINE = $5,
+			PRIORITY = $6,
+			STATUS = $7
+		WHERE ID = $8
+		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, ASSIGNED_AT, ACCEPTED_AT, DEADLINE, PRIORITY, STATUS;
+	`
+
+	err := t.db.db.QueryRow(
+		query,
+		taskData.AssignedBy,
+		taskData.AssignedTo,
+		taskData.AssignedAt,
+		taskData.AcceptedAt,
+		taskData.Deadline,
+		taskData.Priority,
+		taskData.Status,
+		taskId,
+	).Scan(
+		&task.Id,
+		&task.AssignedBy,
+		&task.AssignedTo,
+		&task.AssignedAt,
+		&task.AcceptedAt,
+		&task.Deadline,
+		&task.Priority,
+		&task.Status,
+	)
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
+}
