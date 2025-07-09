@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"user_service/src/internal/adaptors/persistance"
@@ -11,6 +12,8 @@ import (
 	"user_service/src/internal/interfaces/input/api/rest/routes"
 	"user_service/src/internal/usecase"
 	"user_service/src/pkg/migrate"
+
+	grpcgoogle "google.golang.org/grpc"
 )
 
 func main() {
@@ -53,6 +56,19 @@ func main() {
 	userHandler := handler.NewUserHandler(configurations, userService)
 
 	router := routes.InitRoutes(&userHandler, configurations.JWT_SECRET)
+
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		fmt.Printf("Failed to listen grpc server in user service %v", err)
+	}
+
+	go func() {
+		grpcServer := grpcgoogle.NewServer() //google's grpc
+		fmt.Println("gRPC server listening on 50051 port")
+		if err := grpcServer.Serve(lis); err != nil {
+			fmt.Printf("failed to serve gRPC server: %v", err)
+		}
+	}()
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configurations.APP_PORT), router)
 	if err != nil {
