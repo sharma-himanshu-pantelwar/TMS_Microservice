@@ -8,10 +8,14 @@ import (
 	"os"
 	"user_service/src/internal/adaptors/persistance"
 	"user_service/src/internal/config"
+
 	"user_service/src/internal/interfaces/input/api/rest/handler"
 	"user_service/src/internal/interfaces/input/api/rest/routes"
 	"user_service/src/internal/usecase"
 	"user_service/src/pkg/migrate"
+
+	pb "user_service/src/internal/interfaces/output/grpc"
+	grpcserver "user_service/src/internal/interfaces/output/grpc/server"
 
 	grpcgoogle "google.golang.org/grpc"
 )
@@ -62,8 +66,12 @@ func main() {
 		fmt.Printf("Failed to listen grpc server in user service %v", err)
 	}
 
+	grpcServer := grpcgoogle.NewServer()
+	// pb.RegisterSessionValidateServer(grpcServer)
+	// pb.RegisterSessionValidateServer(grpcServer, &pb.SessionValidatorServer{UserService: userService})
+	pb.RegisterSessionValidatorServer(grpcServer, &grpcserver.SessionServer{DB: database.GetDB()})
 	go func() {
-		grpcServer := grpcgoogle.NewServer() //google's grpc
+
 		fmt.Println("gRPC server listening on 50051 port")
 		if err := grpcServer.Serve(lis); err != nil {
 			fmt.Printf("failed to serve gRPC server: %v", err)

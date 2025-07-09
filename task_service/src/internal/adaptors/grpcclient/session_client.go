@@ -25,11 +25,27 @@ func NewClient(userServiceAddress string) (*Client, error) {
 		client: client,
 	}, nil
 }
+
+// func (c *Client) ValidateSession(ctx context.Context, sessionID string) (bool, string, error) {
+// 	resp, err := c.client.ValidateSession(ctx, &pb.ValidateSessionRequest{SessionId: sessionID})
+// 	fmt.Println("Response in grpcClient: ", resp)
+// 	if err != nil {
+// 		fmt.Println("err is ", err)
+// 		return false, "", err
+// 	}
+// 	return resp.Valid, resp.UserId, nil
+// }
+
 func (c *Client) ValidateSession(ctx context.Context, sessionID string) (bool, string, error) {
 	resp, err := c.client.ValidateSession(ctx, &pb.ValidateSessionRequest{SessionId: sessionID})
 	fmt.Println("Response in grpcClient: ", resp)
 	if err != nil {
+		fmt.Println("err is ", err)
 		return false, "", err
+	}
+	if resp == nil {
+		fmt.Println("nil response from ValidateSession")
+		return false, "", fmt.Errorf("recieved nil response from ValidateSession")
 	}
 	return resp.Valid, resp.UserId, nil
 }

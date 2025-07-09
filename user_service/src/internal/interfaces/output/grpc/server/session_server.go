@@ -11,17 +11,18 @@ import (
 
 type SessionServer struct {
 	pb.UnimplementedSessionValidatorServer
+
 	DB *sql.DB
 }
 
-func (s *SessionServer) ValidateSession(ctx context.Context, req *pb.ValidateSessionRequest) *pb.ValidateSessionResponse {
+func (s *SessionServer) ValidateSession(ctx context.Context, req *pb.ValidateSessionRequest) (*pb.ValidateSessionResponse, error) {
 	sessionId := req.GetSessionId()
 	uid, err := uuid.Parse(sessionId)
 	if err != nil {
 		return &pb.ValidateSessionResponse{
 			Valid: false,
 			Error: "invalid session id",
-		}
+		}, err
 	}
 	var userId int
 	var expiresAt time.Time
@@ -30,18 +31,18 @@ func (s *SessionServer) ValidateSession(ctx context.Context, req *pb.ValidateSes
 		return &pb.ValidateSessionResponse{
 			Valid: false,
 			Error: "session not found",
-		}
+		}, err
 	}
 	if time.Now().After(expiresAt) {
 		return &pb.ValidateSessionResponse{
 			Valid: false,
 			Error: "Session expired",
-		}
+		}, nil
 	}
 
 	return &pb.ValidateSessionResponse{
 		Valid:  true,
 		UserId: string(rune(userId)),
 		Error:  "",
-	}
+	}, nil
 }

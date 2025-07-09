@@ -19,6 +19,9 @@ func SessionAuthMiddleware(sessionClient *sessionclient.Client) func(http.Handle
 			valid, _, err := sessionClient.ValidateSession(r.Context(), sessionID)
 
 			if err != nil || !valid {
+				fmt.Println("Error in session auth middleware ", err)
+				// fmt.Println("valid ", valid)
+
 				http.Error(w, "invalid session", http.StatusUnauthorized)
 				return
 			}
