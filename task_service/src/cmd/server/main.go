@@ -60,3 +60,9 @@ func main() {
 	}
 
 }
+
+// TODO
+// create more tasks api if needed
+// notification http part if any
+// grpc implement in all and connect
+// redis for notification
