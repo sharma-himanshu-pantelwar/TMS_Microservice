@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
-	"user_service/src/pkg/sqlparser"
+	"task_service/src/pkg/sqlparser"
 )
 
 type Migrate struct {

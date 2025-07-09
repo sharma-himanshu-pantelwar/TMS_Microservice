@@ -1,7 +1,7 @@
 package persistance
 
 import (
-	"user_service/src/internal/core/tasks"
+	"task_service/src/internal/core/tasks"
 )
 
 type TaskRepo struct {

@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"errors"
-	"user_service/src/internal/core/tasks"
+	"task_service/src/internal/core/tasks"
 )
 
 type TaskService struct {

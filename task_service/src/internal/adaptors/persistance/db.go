@@ -3,7 +3,7 @@ package persistance
 import (
 	"database/sql"
 	"fmt"
-	"user_service/src/internal/config"
+	"task_service/src/internal/config"
 
 	_ "github.com/lib/pq"
 )

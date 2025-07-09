@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"user_service/src/internal/core/tasks"
-	"user_service/src/pkg/response"
+	"task_service/src/internal/core/tasks"
+	"task_service/src/pkg/response"
 
 	"github.com/go-chi/chi/v5"
 )

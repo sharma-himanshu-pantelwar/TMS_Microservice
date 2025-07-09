@@ -5,12 +5,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"user_service/src/internal/adaptors/persistance"
-	"user_service/src/internal/config"
-	"user_service/src/internal/interfaces/input/api/rest/handler"
-	"user_service/src/internal/interfaces/input/api/rest/routes"
-	"user_service/src/internal/usecase"
-	"user_service/src/pkg/migrate"
+	sessionclient "task_service/src/internal/adaptors/grpcclient"
+	"task_service/src/internal/adaptors/persistance"
+	"task_service/src/internal/config"
+	"task_service/src/internal/interfaces/input/api/rest/handler"
+	"task_service/src/internal/interfaces/input/api/rest/routes"
+	"task_service/src/internal/usecase"
+	"task_service/src/pkg/migrate"
 )
 
 func main() {
@@ -19,7 +20,6 @@ func main() {
 		log.Fatalf("Error connecting to db %v", err)
 	}
 	fmt.Println("Connected to database")
-
 	// fetch current cwd
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -51,7 +51,15 @@ func main() {
 	// handler
 	taskHandler := handler.NewTaskHandler(taskService)
 
-	router := routes.InitRoutes(&taskHandler)
+	sessionClient, err := sessionclient.NewClient("localhost:50051")
+	if err != nil {
+		fmt.Printf("unable to connect to session client due to : %v", err)
+		// os.Exit(1)
+	}
+	fmt.Println("?connected to session client")
+	defer sessionClient.Close()
+	router := routes.InitRoutes(&taskHandler, sessionClient)
+	// router := routes.InitRoutes(&taskHandler)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%s", configurations.APP_PORT), router)
 	if err != nil {

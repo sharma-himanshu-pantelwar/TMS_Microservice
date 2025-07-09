@@ -2,13 +2,15 @@ package routes
 
 import (
 	"net/http"
-	"user_service/src/internal/interfaces/input/api/rest/handler"
+	sessionclient "task_service/src/internal/adaptors/grpcclient"
+	"task_service/src/internal/interfaces/input/api/rest/handler"
+	samw "task_service/src/internal/interfaces/input/api/rest/middleware"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 )
 
-func InitRoutes(taskHandler *handler.TaskHandler) http.Handler {
+func InitRoutes(taskHandler *handler.TaskHandler, sessionClient *sessionclient.Client) http.Handler {
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -19,6 +21,8 @@ func InitRoutes(taskHandler *handler.TaskHandler) http.Handler {
 		AllowCredentials: true,
 	}))
 	router.Route("/v1/tasks", func(r chi.Router) {
+		r.Use(samw.SessionAuthMiddleware(sessionClient))
+
 		r.Post("/", taskHandler.RegisterTaskHandler)
 		r.Put("/{id}", taskHandler.UpdateTaskHandler)
 
