@@ -12,6 +12,6 @@ message ValidateSessionRequest{
 }
 message ValidateSessionResponse{
     bool valid=1;
-    string user_id=2;
+    int64 user_id=2;
     string error=3;
 }

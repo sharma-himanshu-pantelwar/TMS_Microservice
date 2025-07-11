@@ -25,6 +25,11 @@ func InitRoutes(taskHandler *handler.TaskHandler, sessionClient *sessionclient.C
 
 		r.Post("/", taskHandler.RegisterTaskHandler)
 		r.Put("/{id}", taskHandler.UpdateTaskHandler)
+		r.Get("/all", taskHandler.GetAllTasksHandler)
+		r.Get("/", taskHandler.GetMyTasksHandler)
+		r.Delete("/{id}", taskHandler.DeleteTaskHandler)
+		r.Get("/bin/", taskHandler.GetTaskBinHandler)
+		r.Patch("/bin/restore/{id}", taskHandler.RestoreTaskFromBinHandler)
 
 	})
 

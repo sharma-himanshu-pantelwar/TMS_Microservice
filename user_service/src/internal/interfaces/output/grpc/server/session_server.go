@@ -1,8 +1,10 @@
 package server
 
+//
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 	pb "user_service/src/internal/interfaces/output/grpc"
 
@@ -40,9 +42,10 @@ func (s *SessionServer) ValidateSession(ctx context.Context, req *pb.ValidateSes
 		}, nil
 	}
 
+	fmt.Println("user id int session_server.go", userId)
 	return &pb.ValidateSessionResponse{
 		Valid:  true,
-		UserId: string(rune(userId)),
+		UserId: int64(userId),
 		Error:  "",
 	}, nil
 }

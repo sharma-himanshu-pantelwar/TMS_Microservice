@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"fmt"
 	"task_service/src/internal/core/tasks"
 )
 
@@ -9,7 +10,7 @@ type TaskService struct {
 	taskRepo tasks.TaskRepoImpl
 }
 
-func NewTaskService(taskRepo tasks.TaskRepoImpl) tasks.TaskRepoImpl {
+func NewTaskService(taskRepo tasks.TaskRepoImpl) TaskService {
 	return TaskService{taskRepo: taskRepo}
 }
 
@@ -22,13 +23,60 @@ func (ts TaskService) CreateTask(taskData tasks.TaskDetails) (tasks.TaskDetails,
 
 	return createdTask, nil
 }
+func (ts TaskService) GetAllTasks(userId int64) ([]tasks.TaskDetails, error) {
+	allTasks, err := ts.taskRepo.GetAllTasks(userId)
+	if err != nil {
+		// fmt.Println(err)
+		return allTasks, errors.New("failed to fetch all task, try again later")
+	}
+
+	return allTasks, nil
+}
+func (ts TaskService) GetMyTasks(userId int64) ([]tasks.TaskDetails, error) {
+	allTasks, err := ts.taskRepo.GetMyTasks(userId)
+	if err != nil {
+		// fmt.Println(err)
+		return allTasks, errors.New("failed to fetch all task, try again later")
+	}
+
+	return allTasks, nil
+}
 
 func (ts TaskService) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.TaskDetails, error) {
 	updatedTask, err := ts.taskRepo.UpdateTask(taskData, taskId)
 	if err != nil {
-		// fmt.Println(err)
+		fmt.Println(err)
 		return updatedTask, errors.New("failed to update task, try again later")
 	}
 
 	return updatedTask, nil
+}
+func (ts TaskService) DeleteTask(userId int64, taskId int) (tasks.TaskDetails, error) {
+	updatedTask, err := ts.taskRepo.DeleteTask(userId, taskId)
+	if err != nil {
+		fmt.Println(err)
+		return updatedTask, errors.New("failed to update task, try again later")
+	}
+
+	return updatedTask, nil
+}
+
+// GetAllTasksInBin(userId)
+func (ts TaskService) GetAllTasksInBin(userId int64) ([]tasks.TaskDetails, error) {
+	allTasks, err := ts.taskRepo.GetAllTasksInBin(userId)
+	if err != nil {
+		// fmt.Println(err)
+		return allTasks, errors.New("failed to fetch all task, try again later")
+	}
+
+	return allTasks, nil
+}
+func (ts TaskService) RestoreTask(userId int64, taskId int) (tasks.TaskDetails, error) {
+	allTasks, err := ts.taskRepo.RestoreTaskFromBin(userId, taskId)
+	if err != nil {
+		// fmt.Println(err)
+		return allTasks, errors.New("failed to fetch all task, try again later")
+	}
+
+	return allTasks, nil
 }

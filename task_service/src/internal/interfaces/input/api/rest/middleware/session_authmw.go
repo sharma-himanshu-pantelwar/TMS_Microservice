@@ -1,10 +1,13 @@
 package sessionauthmiddleware
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	sessionclient "task_service/src/internal/adaptors/grpcclient"
 )
+
+const UserIdKey string = "userId"
 
 func SessionAuthMiddleware(sessionClient *sessionclient.Client) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -16,7 +19,7 @@ func SessionAuthMiddleware(sessionClient *sessionclient.Client) func(http.Handle
 			}
 			sessionID := cookie.Value
 			fmt.Println("Session id : ", sessionID)
-			valid, _, err := sessionClient.ValidateSession(r.Context(), sessionID)
+			valid, userId, err := sessionClient.ValidateSession(r.Context(), sessionID)
 
 			if err != nil || !valid {
 				fmt.Println("Error in session auth middleware ", err)
@@ -25,6 +28,10 @@ func SessionAuthMiddleware(sessionClient *sessionclient.Client) func(http.Handle
 				http.Error(w, "invalid session", http.StatusUnauthorized)
 				return
 			}
+
+			// store userid in context
+			ctx := context.WithValue(r.Context(), UserIdKey, userId)
+			r = r.WithContext(ctx)
 
 			next.ServeHTTP(w, r)
 		})

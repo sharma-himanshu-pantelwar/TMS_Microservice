@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.12.4
-// source: user_service/src/internal/interfaces/output/grpc/session.proto
+// source: session.proto
 
 package grpc
 
@@ -117,5 +117,5 @@ var SessionValidator_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "user_service/src/internal/interfaces/output/grpc/session.proto",
+	Metadata: "session.proto",
 }

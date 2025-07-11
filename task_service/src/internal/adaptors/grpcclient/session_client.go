@@ -36,16 +36,16 @@ func NewClient(userServiceAddress string) (*Client, error) {
 // 	return resp.Valid, resp.UserId, nil
 // }
 
-func (c *Client) ValidateSession(ctx context.Context, sessionID string) (bool, string, error) {
+func (c *Client) ValidateSession(ctx context.Context, sessionID string) (bool, int64, error) {
 	resp, err := c.client.ValidateSession(ctx, &pb.ValidateSessionRequest{SessionId: sessionID})
 	fmt.Println("Response in grpcClient: ", resp)
 	if err != nil {
 		fmt.Println("err is ", err)
-		return false, "", err
+		return false, 0, err
 	}
 	if resp == nil {
 		fmt.Println("nil response from ValidateSession")
-		return false, "", fmt.Errorf("recieved nil response from ValidateSession")
+		return false, 0, fmt.Errorf("recieved nil response from ValidateSession")
 	}
 	return resp.Valid, resp.UserId, nil
 }

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v3.12.4
-// source: user_service/src/internal/interfaces/output/grpc/session.proto
+// source: session.proto
 
 package grpc
 
@@ -30,7 +30,7 @@ type ValidateSessionRequest struct {
 
 func (x *ValidateSessionRequest) Reset() {
 	*x = ValidateSessionRequest{}
-	mi := &file_user_service_src_internal_interfaces_output_grpc_session_proto_msgTypes[0]
+	mi := &file_session_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *ValidateSessionRequest) String() string {
 func (*ValidateSessionRequest) ProtoMessage() {}
 
 func (x *ValidateSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_service_src_internal_interfaces_output_grpc_session_proto_msgTypes[0]
+	mi := &file_session_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *ValidateSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateSessionRequest.ProtoReflect.Descriptor instead.
 func (*ValidateSessionRequest) Descriptor() ([]byte, []int) {
-	return file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescGZIP(), []int{0}
+	return file_session_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ValidateSessionRequest) GetSessionId() string {
@@ -68,7 +68,7 @@ func (x *ValidateSessionRequest) GetSessionId() string {
 type ValidateSessionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Error         string                 `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -76,7 +76,7 @@ type ValidateSessionResponse struct {
 
 func (x *ValidateSessionResponse) Reset() {
 	*x = ValidateSessionResponse{}
-	mi := &file_user_service_src_internal_interfaces_output_grpc_session_proto_msgTypes[1]
+	mi := &file_session_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -88,7 +88,7 @@ func (x *ValidateSessionResponse) String() string {
 func (*ValidateSessionResponse) ProtoMessage() {}
 
 func (x *ValidateSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_service_src_internal_interfaces_output_grpc_session_proto_msgTypes[1]
+	mi := &file_session_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -101,7 +101,7 @@ func (x *ValidateSessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateSessionResponse.ProtoReflect.Descriptor instead.
 func (*ValidateSessionResponse) Descriptor() ([]byte, []int) {
-	return file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescGZIP(), []int{1}
+	return file_session_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ValidateSessionResponse) GetValid() bool {
@@ -111,11 +111,11 @@ func (x *ValidateSessionResponse) GetValid() bool {
 	return false
 }
 
-func (x *ValidateSessionResponse) GetUserId() string {
+func (x *ValidateSessionResponse) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 func (x *ValidateSessionResponse) GetError() string {
@@ -125,39 +125,39 @@ func (x *ValidateSessionResponse) GetError() string {
 	return ""
 }
 
-var File_user_service_src_internal_interfaces_output_grpc_session_proto protoreflect.FileDescriptor
+var File_session_proto protoreflect.FileDescriptor
 
-const file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDesc = "" +
+const file_session_proto_rawDesc = "" +
 	"\n" +
-	">user_service/src/internal/interfaces/output/grpc/session.proto\x12\asession\"7\n" +
+	"\rsession.proto\x12\asession\"7\n" +
 	"\x16ValidateSessionRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"^\n" +
 	"\x17ValidateSessionResponse\x12\x14\n" +
 	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x14\n" +
 	"\x05error\x18\x03 \x01(\tR\x05error2h\n" +
 	"\x10SessionValidator\x12T\n" +
 	"\x0fValidateSession\x12\x1f.session.ValidateSessionRequest\x1a .session.ValidateSessionResponseB1Z/user_service/src/internal/intefaces/output/grpcb\x06proto3"
 
 var (
-	file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescOnce sync.Once
-	file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescData []byte
+	file_session_proto_rawDescOnce sync.Once
+	file_session_proto_rawDescData []byte
 )
 
-func file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescGZIP() []byte {
-	file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescOnce.Do(func() {
-		file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDesc), len(file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDesc)))
+func file_session_proto_rawDescGZIP() []byte {
+	file_session_proto_rawDescOnce.Do(func() {
+		file_session_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_session_proto_rawDesc), len(file_session_proto_rawDesc)))
 	})
-	return file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDescData
+	return file_session_proto_rawDescData
 }
 
-var file_user_service_src_internal_interfaces_output_grpc_session_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_user_service_src_internal_interfaces_output_grpc_session_proto_goTypes = []any{
+var file_session_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_session_proto_goTypes = []any{
 	(*ValidateSessionRequest)(nil),  // 0: session.ValidateSessionRequest
 	(*ValidateSessionResponse)(nil), // 1: session.ValidateSessionResponse
 }
-var file_user_service_src_internal_interfaces_output_grpc_session_proto_depIdxs = []int32{
+var file_session_proto_depIdxs = []int32{
 	0, // 0: session.SessionValidator.ValidateSession:input_type -> session.ValidateSessionRequest
 	1, // 1: session.SessionValidator.ValidateSession:output_type -> session.ValidateSessionResponse
 	1, // [1:2] is the sub-list for method output_type
@@ -167,26 +167,26 @@ var file_user_service_src_internal_interfaces_output_grpc_session_proto_depIdxs 
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_user_service_src_internal_interfaces_output_grpc_session_proto_init() }
-func file_user_service_src_internal_interfaces_output_grpc_session_proto_init() {
-	if File_user_service_src_internal_interfaces_output_grpc_session_proto != nil {
+func init() { file_session_proto_init() }
+func file_session_proto_init() {
+	if File_session_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDesc), len(file_user_service_src_internal_interfaces_output_grpc_session_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_session_proto_rawDesc), len(file_session_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_user_service_src_internal_interfaces_output_grpc_session_proto_goTypes,
-		DependencyIndexes: file_user_service_src_internal_interfaces_output_grpc_session_proto_depIdxs,
-		MessageInfos:      file_user_service_src_internal_interfaces_output_grpc_session_proto_msgTypes,
+		GoTypes:           file_session_proto_goTypes,
+		DependencyIndexes: file_session_proto_depIdxs,
+		MessageInfos:      file_session_proto_msgTypes,
 	}.Build()
-	File_user_service_src_internal_interfaces_output_grpc_session_proto = out.File
-	file_user_service_src_internal_interfaces_output_grpc_session_proto_goTypes = nil
-	file_user_service_src_internal_interfaces_output_grpc_session_proto_depIdxs = nil
+	File_session_proto = out.File
+	file_session_proto_goTypes = nil
+	file_session_proto_depIdxs = nil
 }

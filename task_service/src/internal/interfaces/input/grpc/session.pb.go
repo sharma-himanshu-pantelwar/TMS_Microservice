@@ -68,7 +68,7 @@ func (x *ValidateSessionRequest) GetSessionId() string {
 type ValidateSessionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Error         string                 `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -111,11 +111,11 @@ func (x *ValidateSessionResponse) GetValid() bool {
 	return false
 }
 
-func (x *ValidateSessionResponse) GetUserId() string {
+func (x *ValidateSessionResponse) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 func (x *ValidateSessionResponse) GetError() string {
@@ -135,7 +135,7 @@ const file_session_proto_rawDesc = "" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\"^\n" +
 	"\x17ValidateSessionResponse\x12\x14\n" +
 	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x14\n" +
 	"\x05error\x18\x03 \x01(\tR\x05error2h\n" +
 	"\x10SessionValidator\x12T\n" +
 	"\x0fValidateSession\x12\x1f.session.ValidateSessionRequest\x1a .session.ValidateSessionResponseB0Z.task_service/src/internal/intefaces/input/grpcb\x06proto3"
