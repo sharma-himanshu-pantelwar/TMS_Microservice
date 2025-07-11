@@ -333,3 +333,91 @@ func (th TaskHandler) RestoreTaskFromBinHandler(w http.ResponseWriter, r *http.R
 	response.Set()
 
 }
+func (th TaskHandler) DeleteTaskFromBinHandler(w http.ResponseWriter, r *http.Request) {
+	taskIdString := chi.URLParam(r, "id")
+	taskId, err := strconv.Atoi(taskIdString)
+	if err != nil {
+		response := response.Response{
+			ResponseWriter: w,
+			StatusCode:     http.StatusBadRequest,
+			Error:          err.Error(),
+			Message:        "invalid taskid",
+		}
+		response.Set()
+		return
+	}
+
+	userIdVal := r.Context().Value(samw.UserIdKey)
+	if userIdVal == nil {
+		http.Error(w, "userId not found in context", http.StatusUnauthorized)
+		return
+	}
+	// updatedTaskData.AssignedBy = userIdVal.(int64)
+
+	deletedTask, err := th.taskService.DeleteTaskFromBin(userIdVal.(int64), taskId)
+	if err != nil {
+		response := response.Response{
+			ResponseWriter: w,
+			StatusCode:     http.StatusInternalServerError,
+			Error:          err.Error(),
+		}
+		response.Set()
+		return
+	}
+	response := response.Response{
+		ResponseWriter: w,
+		StatusCode:     http.StatusOK,
+		Message:        "Task restored from bin successfully",
+		Error:          "none",
+		Headers: map[string]string{
+			"Content-Type": "application/json",
+		},
+		Data: deletedTask,
+	}
+	response.Set()
+
+}
+func (th TaskHandler) DeleteTaskPermanentlyHandler(w http.ResponseWriter, r *http.Request) {
+	taskIdString := chi.URLParam(r, "id")
+	taskId, err := strconv.Atoi(taskIdString)
+	if err != nil {
+		response := response.Response{
+			ResponseWriter: w,
+			StatusCode:     http.StatusBadRequest,
+			Error:          err.Error(),
+			Message:        "invalid taskid",
+		}
+		response.Set()
+		return
+	}
+
+	userIdVal := r.Context().Value(samw.UserIdKey)
+	if userIdVal == nil {
+		http.Error(w, "userId not found in context", http.StatusUnauthorized)
+		return
+	}
+	// updatedTaskData.AssignedBy = userIdVal.(int64)
+
+	deletedTask, err := th.taskService.DeleteTaskPermanently(userIdVal.(int64), taskId)
+	if err != nil {
+		response := response.Response{
+			ResponseWriter: w,
+			StatusCode:     http.StatusInternalServerError,
+			Error:          err.Error(),
+		}
+		response.Set()
+		return
+	}
+	response := response.Response{
+		ResponseWriter: w,
+		StatusCode:     http.StatusOK,
+		Message:        "Task restored from bin successfully",
+		Error:          "none",
+		Headers: map[string]string{
+			"Content-Type": "application/json",
+		},
+		Data: deletedTask,
+	}
+	response.Set()
+
+}

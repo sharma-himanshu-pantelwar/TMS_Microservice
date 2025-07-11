@@ -80,3 +80,22 @@ func (ts TaskService) RestoreTask(userId int64, taskId int) (tasks.TaskDetails, 
 
 	return allTasks, nil
 }
+
+func (ts TaskService) DeleteTaskFromBin(userId int64, taskId int) (tasks.TaskDetails, error) {
+	updatedTask, err := ts.taskRepo.DeleteTaskFromBin(userId, taskId)
+	if err != nil {
+		fmt.Println(err)
+		return updatedTask, errors.New("failed to update task, try again later")
+	}
+
+	return updatedTask, nil
+}
+func (ts TaskService) DeleteTaskPermanently(userId int64, taskId int) (tasks.TaskDetails, error) {
+	updatedTask, err := ts.taskRepo.DeleteTaskPermanently(userId, taskId)
+	if err != nil {
+		fmt.Println(err)
+		return updatedTask, errors.New("failed to update task, try again later")
+	}
+
+	return updatedTask, nil
+}

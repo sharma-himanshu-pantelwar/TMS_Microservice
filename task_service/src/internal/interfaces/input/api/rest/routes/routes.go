@@ -30,6 +30,8 @@ func InitRoutes(taskHandler *handler.TaskHandler, sessionClient *sessionclient.C
 		r.Delete("/{id}", taskHandler.DeleteTaskHandler)
 		r.Get("/bin/", taskHandler.GetTaskBinHandler)
 		r.Patch("/bin/restore/{id}", taskHandler.RestoreTaskFromBinHandler)
+		r.Delete("/bin/delete/{id}", taskHandler.DeleteTaskFromBinHandler)
+		r.Delete("/permanent/{id}", taskHandler.DeleteTaskPermanentlyHandler)
 
 	})
 

@@ -155,9 +155,9 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 	}
 
 	// Update  non-empty values
-	if taskData.AssignedBy != 0 {
-		existing.AssignedBy = taskData.AssignedBy
-	}
+	// if taskData.AssignedBy != 0 {
+	// 	existing.AssignedBy = taskData.AssignedBy
+	// }
 	if taskData.AssignedTo != 0 {
 		existing.AssignedTo = taskData.AssignedTo
 	}
@@ -336,4 +336,66 @@ func (t TaskRepo) RestoreTaskFromBin(userId int64, taskId int) (tasks.TaskDetail
 	}
 
 	return restored, nil
+}
+func (t TaskRepo) DeleteTaskFromBin(userId int64, taskId int) (tasks.TaskDetails, error) {
+
+	// Update
+	deleteQuery := `
+		DELETE FROM TASKS 
+		WHERE ID = $1 AND ASSIGNED_BY=$2 AND IS_TRASH=TRUE
+		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS;
+	`
+
+	var delFromBin tasks.TaskDetails
+	err := t.db.db.QueryRow(
+		deleteQuery,
+		taskId,
+		userId,
+	).Scan(
+		&delFromBin.Id,
+		&delFromBin.AssignedBy,
+		&delFromBin.AssignedTo,
+		&delFromBin.TaskName,
+		&delFromBin.TaskDescription,
+		&delFromBin.AssignedAt,
+		&delFromBin.Deadline,
+		&delFromBin.Priority,
+		&delFromBin.Status,
+	)
+	if err != nil {
+		return delFromBin, err
+	}
+
+	return delFromBin, nil
+}
+func (t TaskRepo) DeleteTaskPermanently(userId int64, taskId int) (tasks.TaskDetails, error) {
+
+	// Update
+	deleteQuery := `
+		DELETE FROM TASKS 
+		WHERE ID = $1 AND ASSIGNED_BY=$2 AND IS_TRASH=FALSE
+		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS;
+	`
+
+	var delFrom tasks.TaskDetails
+	err := t.db.db.QueryRow(
+		deleteQuery,
+		taskId,
+		userId,
+	).Scan(
+		&delFrom.Id,
+		&delFrom.AssignedBy,
+		&delFrom.AssignedTo,
+		&delFrom.TaskName,
+		&delFrom.TaskDescription,
+		&delFrom.AssignedAt,
+		&delFrom.Deadline,
+		&delFrom.Priority,
+		&delFrom.Status,
+	)
+	if err != nil {
+		return delFrom, err
+	}
+
+	return delFrom, nil
 }
