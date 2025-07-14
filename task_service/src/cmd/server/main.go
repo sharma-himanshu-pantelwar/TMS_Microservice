@@ -7,6 +7,7 @@ import (
 	"os"
 	sessionclient "task_service/src/internal/adaptors/grpcclient"
 	"task_service/src/internal/adaptors/persistance"
+	redisadaptor "task_service/src/internal/adaptors/redis"
 	"task_service/src/internal/config"
 	"task_service/src/internal/interfaces/input/api/rest/handler"
 	"task_service/src/internal/interfaces/input/api/rest/routes"
@@ -45,8 +46,10 @@ func main() {
 	//repos
 	taskRepo := persistance.NewTaskRepo(database)
 
+	//redis publisher
+	redisPublisher := redisadaptor.NewRedisPublisher("localhost:6379", "", 0)
 	//services
-	taskService := usecase.NewTaskService(taskRepo)
+	taskService := usecase.NewTaskService(taskRepo, redisPublisher)
 
 	// handler
 	taskHandler := handler.NewTaskHandler(taskService)
@@ -70,7 +73,4 @@ func main() {
 }
 
 // TODO
-// create more tasks api if needed
-// notification http part if any
-// grpc implement in all and connect
-// redis for notification
+//call redis publisher

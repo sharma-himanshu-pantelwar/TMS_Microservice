@@ -1,17 +1,23 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	redisadaptor "task_service/src/internal/adaptors/redis"
 	"task_service/src/internal/core/tasks"
 )
 
 type TaskService struct {
-	taskRepo tasks.TaskRepoImpl
+	taskRepo       tasks.TaskRepoImpl
+	redisPublisher *redisadaptor.RedisPublisher
 }
 
-func NewTaskService(taskRepo tasks.TaskRepoImpl) TaskService {
-	return TaskService{taskRepo: taskRepo}
+func NewTaskService(taskRepo tasks.TaskRepoImpl, redisPublisher *redisadaptor.RedisPublisher) TaskService {
+	return TaskService{
+		taskRepo:       taskRepo,
+		redisPublisher: redisPublisher,
+	}
 }
 
 func (ts TaskService) CreateTask(taskData tasks.TaskDetails) (tasks.TaskDetails, error) {
@@ -19,6 +25,13 @@ func (ts TaskService) CreateTask(taskData tasks.TaskDetails) (tasks.TaskDetails,
 	if err != nil {
 		// fmt.Println(err)
 		return createdTask, errors.New("failed to create task, try again later")
+	}
+
+	//publish notification
+	if ts.redisPublisher != nil {
+		msg := fmt.Sprintf("Task Created: %+v", createdTask)
+		_ = ts.redisPublisher.PublishTaskNotification(context.Background(), "task_notifications", msg)
+		fmt.Println("message sent to redis : ", msg)
 	}
 
 	return createdTask, nil
@@ -48,7 +61,12 @@ func (ts TaskService) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.
 		fmt.Println(err)
 		return updatedTask, errors.New("failed to update task, try again later")
 	}
-
+	//publish notification
+	if ts.redisPublisher != nil {
+		msg := fmt.Sprintf("Updated Task: %+v", updatedTask)
+		_ = ts.redisPublisher.PublishTaskNotification(context.Background(), "task_notifications", msg)
+		fmt.Println("message sent to redis : ", msg)
+	}
 	return updatedTask, nil
 }
 func (ts TaskService) DeleteTask(userId int64, taskId int) (tasks.TaskDetails, error) {
@@ -57,7 +75,11 @@ func (ts TaskService) DeleteTask(userId int64, taskId int) (tasks.TaskDetails, e
 		fmt.Println(err)
 		return updatedTask, errors.New("failed to update task, try again later")
 	}
-
+	if ts.redisPublisher != nil {
+		msg := fmt.Sprintf("Deleted Task: %+v", updatedTask)
+		_ = ts.redisPublisher.PublishTaskNotification(context.Background(), "task_notifications", msg)
+		fmt.Println("message sent to redis : ", msg)
+	}
 	return updatedTask, nil
 }
 
