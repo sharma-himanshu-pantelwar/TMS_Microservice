@@ -2,14 +2,10 @@ package notifications
 
 import "time"
 
-type Notification struct {
+type NotificationData struct {
 	ID        string    `json:"id"`
-	Type      string    `json:"type"`
-	Message   string    `json:"message"`
 	Channel   string    `json:"channel"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-type NotificationServiceImpl interface {
-	ProcessNotification(notification Notification) error
+	Payload   string    `json:"payload"`
+	Timestamp time.Time `json:"timestamp"`
+	Status    string    `json:"status"`
 }

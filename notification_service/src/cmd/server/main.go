@@ -18,7 +18,7 @@ func main() {
 	redisSubscriber := redisadaptor.NewRedisSubscriber("localhost:6379", "", 0)
 	defer redisSubscriber.Close()
 
-	// Create context for graceful shutdown
+	// Create context for shutdown
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -34,6 +34,7 @@ func main() {
 
 	// Start subscribing to Redis channel
 	fmt.Println(" Listening for task notifications...")
+	fmt.Println(" Notifications will be stored in Redis with 24h TTL")
 
 	err := redisSubscriber.SubscribeToChannel(ctx, "task_notifications")
 	if err != nil && err != context.Canceled {

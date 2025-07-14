@@ -7,10 +7,10 @@ import (
 )
 
 type Config struct {
-	APP_PORT       string `mapstructure:"APP_PORT"`
-	REDIS_ADDR     string `mapstructure:"REDIS_ADDR"`
-	REDIS_PASSWORD string `mapstructure:"REDIS_PASSWORD"`
-	REDIS_DB       int    `mapstructure:"REDIS_DB"`
+	// APP_PORT       string `mapstructure:"APP_PORT"`
+	// REDIS_ADDR     string `mapstructure:"REDIS_ADDR"`
+	// REDIS_PASSWORD string `mapstructure:"REDIS_PASSWORD"`
+	// REDIS_DB       int    `mapstructure:"REDIS_DB"`
 }
 
 func LoadConfig() (*Config, error) {
