@@ -96,7 +96,7 @@ func (t TaskRepo) GetMyTasks(userId int64) ([]tasks.TaskDetails, error) {
 	// fmt.Printf("GetAllTasks - userId: %d, query: %s\n", userId, query)
 	rows, err := t.db.db.Query(query, userId)
 	if err != nil {
-		fmt.Printf("GetMyTask - Query error: %v\n", err)
+		// fmt.Printf("GetMyTask - Query error: %v\n", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -116,19 +116,19 @@ func (t TaskRepo) GetMyTasks(userId int64) ([]tasks.TaskDetails, error) {
 			&task.IsTrash,
 		)
 		if err != nil {
-			fmt.Printf("GetMyTasks - Scan error: %v\n", err)
+			// fmt.Printf("GetMyTasks - Scan error: %v\n", err)
 			return nil, err
 		}
-		fmt.Printf("GetMyTasks - Found task: %+v\n", task)
+		// fmt.Printf("GetMyTasks - Found task: %+v\n", task)
 		allTasks = append(allTasks, task)
 	}
 
 	if err = rows.Err(); err != nil {
-		fmt.Printf("GetMyTasks - Rows error: %v\n", err)
+		// fmt.Printf("GetMyTasks - Rows error: %v\n", err)
 		return nil, err
 	}
 
-	fmt.Printf("GetMyTasks - Total tasks found: %d\n", len(allTasks))
+	// fmt.Printf("GetMyTasks - Total tasks found: %d\n", len(allTasks))
 	return allTasks, nil
 }
 
@@ -222,12 +222,12 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 		&updated.IsTrash,
 	)
 	if err != nil {
-		fmt.Println("Get my tasks error before return ", err)
+		// fmt.Println("Get my tasks error before return ", err)
 		return updated, err
 	}
-
 	return updated, nil
 }
+
 func (t TaskRepo) DeleteTask(userId int64, taskId int) (tasks.TaskDetails, error) {
 
 	// Update
@@ -237,7 +237,6 @@ func (t TaskRepo) DeleteTask(userId int64, taskId int) (tasks.TaskDetails, error
 		WHERE ID = $1 AND ASSIGNED_BY=$2
 		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS;
 	`
-
 	var deleted tasks.TaskDetails
 	err := t.db.db.QueryRow(
 		deleteQuery,
@@ -257,19 +256,16 @@ func (t TaskRepo) DeleteTask(userId int64, taskId int) (tasks.TaskDetails, error
 	if err != nil {
 		return deleted, err
 	}
-
 	return deleted, nil
 }
 
 func (t TaskRepo) GetAllTasksInBin(userId int64) ([]tasks.TaskDetails, error) {
 	var allBinTasks []tasks.TaskDetails
-
 	query := `
 		SELECT ID, ASSIGNED_BY, ASSIGNED_TO, ASSIGNED_AT, TASK_NAME, TASK_DESCRIPTION, DEADLINE, PRIORITY, STATUS, IS_TRASH
 		FROM TASKS
 		WHERE (ASSIGNED_BY = $1 OR ASSIGNED_TO = $1) AND IS_TRASH='TRUE'; 
 	`
-
 	// fmt.Printf("GetAllTasks - userId: %d, query: %s\n", userId, query)
 	rows, err := t.db.db.Query(query, userId)
 	if err != nil {
@@ -277,7 +273,6 @@ func (t TaskRepo) GetAllTasksInBin(userId int64) ([]tasks.TaskDetails, error) {
 		return nil, err
 	}
 	defer rows.Close()
-
 	for rows.Next() {
 		var task tasks.TaskDetails
 		err := rows.Scan(
@@ -304,13 +299,11 @@ func (t TaskRepo) GetAllTasksInBin(userId int64) ([]tasks.TaskDetails, error) {
 		// fmt.Printf("GetAllTasks - Rows error: %v\n", err)
 		return nil, err
 	}
-
 	fmt.Printf("GetAllTasksInBin - Total tasks found: %d\n", len(allBinTasks))
 	return allBinTasks, nil
 }
 
 func (t TaskRepo) RestoreTaskFromBin(userId int64, taskId int) (tasks.TaskDetails, error) {
-
 	// Update
 	restoreQuery := `
 		UPDATE TASKS SET
@@ -318,7 +311,6 @@ func (t TaskRepo) RestoreTaskFromBin(userId int64, taskId int) (tasks.TaskDetail
 		WHERE ID = $1 AND ASSIGNED_BY=$2
 		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS;
 	`
-
 	var restored tasks.TaskDetails
 	err := t.db.db.QueryRow(
 		restoreQuery,
