@@ -136,7 +136,7 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 
 	// Fetch the existing task
 	selectQuery := `
-		SELECT ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS
+		SELECT ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS,IS_TRASH
 		FROM TASKS WHERE ID = $1;
 	`
 	err := t.db.db.QueryRow(selectQuery, taskId).Scan(
@@ -149,6 +149,7 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 		&existing.Deadline,
 		&existing.Priority,
 		&existing.Status,
+		&existing.IsTrash,
 	)
 	if err != nil {
 		return existing, err
@@ -192,7 +193,7 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 			TASK_NAME = $7,
 			TASK_DESCRIPTION = $8
 		WHERE ID = $9
-		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS;
+		RETURNING ID, ASSIGNED_BY, ASSIGNED_TO, TASK_NAME, TASK_DESCRIPTION, ASSIGNED_AT, DEADLINE, PRIORITY, STATUS, IS_TRASH;
 	`
 
 	var updated tasks.TaskDetails
@@ -217,6 +218,7 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 		&updated.Deadline,
 		&updated.Priority,
 		&updated.Status,
+		&updated.IsTrash,
 	)
 	if err != nil {
 		return updated, err

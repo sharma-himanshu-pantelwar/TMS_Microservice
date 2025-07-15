@@ -8,6 +8,7 @@ import (
 	"task_service/src/internal/core/tasks"
 	samw "task_service/src/internal/interfaces/input/api/rest/middleware"
 	"task_service/src/pkg/response"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -33,6 +34,8 @@ func (th TaskHandler) RegisterTaskHandler(w http.ResponseWriter, r *http.Request
 
 	// Cast userIdVal to int64 since ValidateSession returns int64
 	taskData.AssignedBy = userIdVal.(int64)
+	taskData.AssignedAt = time.Now()
+	taskData.Status = "TODO"
 	err := json.NewDecoder(r.Body).Decode(&taskData)
 	if err != nil {
 		response := response.Response{
@@ -59,7 +62,6 @@ func (th TaskHandler) RegisterTaskHandler(w http.ResponseWriter, r *http.Request
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "User created successfully",
-		Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -94,7 +96,7 @@ func (th TaskHandler) GetAllTasksHandler(w http.ResponseWriter, r *http.Request)
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "Tasks fetched successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -129,7 +131,7 @@ func (th TaskHandler) GetMyTasksHandler(w http.ResponseWriter, r *http.Request) 
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "Tasks fetched successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -186,8 +188,7 @@ func (th TaskHandler) UpdateTaskHandler(w http.ResponseWriter, r *http.Request) 
 	response := response.Response{
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
-		Message:        "User created successfully",
-		Error:          "none",
+		Message:        fmt.Sprintf("Task with id %v, updated successfully ", taskId),
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -243,7 +244,7 @@ func (th TaskHandler) DeleteTaskHandler(w http.ResponseWriter, r *http.Request) 
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "User created successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -279,7 +280,7 @@ func (th TaskHandler) GetTaskBinHandler(w http.ResponseWriter, r *http.Request) 
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "Tasks fetched successfully from bin",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -324,7 +325,7 @@ func (th TaskHandler) RestoreTaskFromBinHandler(w http.ResponseWriter, r *http.R
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "Task restored from bin successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -368,7 +369,7 @@ func (th TaskHandler) DeleteTaskFromBinHandler(w http.ResponseWriter, r *http.Re
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "Task restored from bin successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
@@ -412,7 +413,7 @@ func (th TaskHandler) DeleteTaskPermanentlyHandler(w http.ResponseWriter, r *htt
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "Task restored from bin successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
