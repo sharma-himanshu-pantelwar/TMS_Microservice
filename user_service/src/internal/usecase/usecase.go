@@ -23,9 +23,9 @@ func NewUserService(userRepo users.UserRepoImpl, sessionRepo session.SessionRepo
 func (us UserService) CreateUser(user users.User) (users.User, error) {
 	createdUser, err := us.userRepo.CreateUser(user)
 	if err != nil {
-		return createdUser, errors.New("failed to create user, try again later")
+		// return createdUser, err
+		return createdUser, errors.New("user already exists. Username should be unique")
 	}
-
 	return createdUser, nil
 }
 

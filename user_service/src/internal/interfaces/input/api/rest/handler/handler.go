@@ -49,7 +49,7 @@ func (uh UserHandler) RegisterUserHandler(w http.ResponseWriter, r *http.Request
 		ResponseWriter: w,
 		StatusCode:     http.StatusOK,
 		Message:        "User created successfully",
-		Error:          "none",
+		// Error:          "none",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},

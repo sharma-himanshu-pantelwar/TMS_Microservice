@@ -9,9 +9,9 @@ type Response struct {
 	ResponseWriter http.ResponseWriter `json:"-"`
 	StatusCode     int                 `json:"statusCode"`
 	Headers        map[string]string   `json:"-"`
-	Message        string              `json:"message"`
-	Error          string              `json:"error"`
-	Data           interface{}         `json:"data"`
+	Message        string              `json:"message,omitempty"`
+	Error          string              `json:"error,omitempty"`
+	Data           interface{}         `json:"data,omitempty"`
 }
 
 func (r *Response) Set() {
