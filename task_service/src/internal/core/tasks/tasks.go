@@ -7,8 +7,8 @@ type TaskDetails struct {
 	AssignedBy      int64     `json:"assigned_by"`
 	AssignedTo      int64     `json:"assigned_to,omitempty"`
 	AssignedAt      time.Time `json:"assigned_at"`
-	TaskName        string    `json:"taskName"`
-	TaskDescription string    `json:"taskDescription"`
+	TaskName        string    `json:"task_name"`
+	TaskDescription string    `json:"task_description"`
 	// AcceptedAt      time.Time `json:"accepted_at"`
 	Deadline time.Time `json:"deadline"`
 	Priority string    `json:"priority,omitempty"`
