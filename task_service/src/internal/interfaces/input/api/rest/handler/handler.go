@@ -437,10 +437,7 @@ func (th TaskHandler) CheckAssignedUserStatus(w http.ResponseWriter, r *http.Req
 
 	userId := req.UserId
 	available, count, err := th.taskService.CheckAssignedUserStatus(int64(userId), req.Deadline)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+
 	if err != nil {
 		response := response.Response{
 			ResponseWriter: w,
