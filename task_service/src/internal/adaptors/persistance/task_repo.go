@@ -96,7 +96,7 @@ func (t TaskRepo) GetMyTasks(userId int64) ([]tasks.TaskDetails, error) {
 	// fmt.Printf("GetAllTasks - userId: %d, query: %s\n", userId, query)
 	rows, err := t.db.db.Query(query, userId)
 	if err != nil {
-		// fmt.Printf("GetAllTasks - Query error: %v\n", err)
+		fmt.Printf("GetMyTask - Query error: %v\n", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -113,21 +113,22 @@ func (t TaskRepo) GetMyTasks(userId int64) ([]tasks.TaskDetails, error) {
 			&task.Deadline,
 			&task.Priority,
 			&task.Status,
+			&task.IsTrash,
 		)
 		if err != nil {
-			// fmt.Printf("GetAllTasks - Scan error: %v\n", err)
+			fmt.Printf("GetMyTasks - Scan error: %v\n", err)
 			return nil, err
 		}
-		// fmt.Printf("GetAllTasks - Found task: %+v\n", task)
+		fmt.Printf("GetMyTasks - Found task: %+v\n", task)
 		allTasks = append(allTasks, task)
 	}
 
 	if err = rows.Err(); err != nil {
-		// fmt.Printf("GetAllTasks - Rows error: %v\n", err)
+		fmt.Printf("GetMyTasks - Rows error: %v\n", err)
 		return nil, err
 	}
 
-	fmt.Printf("GetAllTasks - Total tasks found: %d\n", len(allTasks))
+	fmt.Printf("GetMyTasks - Total tasks found: %d\n", len(allTasks))
 	return allTasks, nil
 }
 
@@ -221,6 +222,7 @@ func (t TaskRepo) UpdateTask(taskData tasks.TaskDetails, taskId int) (tasks.Task
 		&updated.IsTrash,
 	)
 	if err != nil {
+		fmt.Println("Get my tasks error before return ", err)
 		return updated, err
 	}
 
