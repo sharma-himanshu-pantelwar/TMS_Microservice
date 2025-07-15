@@ -24,6 +24,7 @@ func InitRoutes(taskHandler *handler.TaskHandler, sessionClient *sessionclient.C
 		r.Use(samw.SessionAuthMiddleware(sessionClient))
 
 		r.Post("/", taskHandler.RegisterTaskHandler)
+		r.Post("/usrstatus", taskHandler.CheckAssignedUserStatus)
 		r.Put("/{id}", taskHandler.UpdateTaskHandler)
 		r.Get("/all", taskHandler.GetAllTasksHandler)
 		r.Get("/", taskHandler.GetMyTasksHandler)

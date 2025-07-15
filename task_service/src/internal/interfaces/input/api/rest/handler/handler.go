@@ -422,3 +422,43 @@ func (th TaskHandler) DeleteTaskPermanentlyHandler(w http.ResponseWriter, r *htt
 	response.Set()
 
 }
+
+func (th TaskHandler) CheckAssignedUserStatus(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		UserId   int       `json:"user_id"`
+		Deadline time.Time `json:"deadline"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil || req.UserId == 0 {
+		http.Error(w, "invalid or missing user_id,deadline in req body", http.StatusBadRequest)
+		return
+	}
+
+	userId := req.UserId
+	available, count, err := th.taskService.CheckAssignedUserStatus(int64(userId), req.Deadline)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if err != nil {
+		response := response.Response{
+			ResponseWriter: w,
+			StatusCode:     http.StatusInternalServerError,
+			Error:          err.Error(),
+		}
+		response.Set()
+		return
+	}
+	response := response.Response{
+		ResponseWriter: w,
+		StatusCode:     http.StatusOK,
+		Message:        fmt.Sprintf("avaiability %v : already assigned tasks with same deadline %v", available, count),
+		// Error:          "none",
+		Headers: map[string]string{
+			"Content-Type": "application/json",
+		},
+	}
+	response.Set()
+
+}

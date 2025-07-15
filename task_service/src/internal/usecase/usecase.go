@@ -6,6 +6,7 @@ import (
 	"fmt"
 	redisadaptor "task_service/src/internal/adaptors/redis"
 	"task_service/src/internal/core/tasks"
+	"time"
 )
 
 type TaskService struct {
@@ -120,4 +121,16 @@ func (ts TaskService) DeleteTaskPermanently(userId int64, taskId int) (tasks.Tas
 	}
 
 	return updatedTask, nil
+}
+
+func (ts TaskService) CheckAssignedUserStatus(userId int64, deadline time.Time) (bool, int, error) {
+
+	available, tasksWorkingUpon, err := ts.taskRepo.CheckAssignedUserStatus(userId, deadline)
+
+	if err != nil {
+		return available, tasksWorkingUpon, errors.New("Failed to check tasks,try again later")
+	}
+
+	return available, tasksWorkingUpon, nil
+
 }

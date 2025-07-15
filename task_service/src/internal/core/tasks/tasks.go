@@ -26,6 +26,7 @@ type TaskRepoImpl interface {
 	RestoreTaskFromBin(userId int64, taskId int) (TaskDetails, error)
 	DeleteTaskFromBin(userId int64, taskId int) (TaskDetails, error)
 	DeleteTaskPermanently(userId int64, taskId int) (TaskDetails, error)
+	CheckAssignedUserStatus(userId int64, deadline time.Time) (bool, int, error)
 }
 type TaskServiceImpl interface {
 	CreateTask(taskData TaskDetails) (TaskDetails, error)
@@ -37,4 +38,5 @@ type TaskServiceImpl interface {
 	DeleteTaskPermanently(userId int64, taskId int) (TaskDetails, error)
 	GetAllTasksInBin(userId int64) ([]TaskDetails, error)
 	RestoreTask(userId int64, taskId int) (TaskDetails, error)
+	CheckAssignedUserStatus(userId int64, deadline time.Time) (bool, int, error)
 }

@@ -3,6 +3,7 @@ package persistance
 import (
 	"fmt"
 	"task_service/src/internal/core/tasks"
+	"time"
 )
 
 type TaskRepo struct {
@@ -394,4 +395,18 @@ func (t TaskRepo) DeleteTaskPermanently(userId int64, taskId int) (tasks.TaskDet
 	}
 
 	return delFrom, nil
+}
+func (t TaskRepo) CheckAssignedUserStatus(userId int64, deadline time.Time) (bool, int, error) {
+	var count int
+
+	query := `SELECT COUNT(*) FROM TASKS WHERE ASSIGNED_TO=$1 AND DEADLINE::DATE=$2::DATE;`
+
+	err := t.db.db.QueryRow(query, userId, deadline).Scan(&count)
+	if err != nil {
+		return false, 0, err
+	}
+	if count > 3 {
+		return false, count, nil
+	}
+	return true, count, nil
 }
